@@ -5,36 +5,40 @@ export interface BookDocument extends Document {
   title: string;
   authors: string[];
   description: string;
-  image: string;
-  link: string;
+  image?: string;  // Made optional
+  link?: string;   // Made optional
 }
 
-// This is a subdocument schema, it won't become its own model but we'll use it as the schema for the User's `savedBooks` array in User.js
 const bookSchema = new Schema<BookDocument>({
-  authors: [
-    {
-      type: String,
-    },
-  ],
+  authors: {
+    type: [String],
+    default: []  // Explicit default value
+  },
   description: {
     type: String,
-    required: true,
+    required: true
   },
-  // saved book id from GoogleBooks
   bookId: {
     type: String,
     required: true,
+    unique: true  // Ensure unique book IDs
   },
   image: {
     type: String,
+    default: ''  // Default empty string
   },
   link: {
     type: String,
+    default: ''  // Default empty string
   },
   title: {
     type: String,
     required: true,
-  },
+    trim: true   // Auto-trim whitespace
+  }
+}, {
+  _id: false,    
+  versionKey: false 
 });
 
 export default bookSchema;
