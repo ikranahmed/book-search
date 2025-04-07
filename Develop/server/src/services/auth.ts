@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { GraphQLError } from 'graphql';
-import User from '../models/User';
+// import User from '../models/User';
 
 
 const secret = process.env.JWT_SECRET_KEY || 'your-strong-secret-key-here';
@@ -29,7 +29,7 @@ export const authMiddleware = ({ req }: { req: any }): AuthContext => {
   }
 
   if (!token) {
-    return { user: undefined };
+    return { user: {_id:'', username:'', email:''} };
   }
 
   try {
@@ -45,7 +45,7 @@ export const authMiddleware = ({ req }: { req: any }): AuthContext => {
   }
 };
 
-export const signToken = (user: { _id: string; username: string; email: string }): string => {
+export const signToken = (user: { _id: any; username: string; email: string }): string => {
   const payload = { 
     _id: user._id, 
     username: user.username, 

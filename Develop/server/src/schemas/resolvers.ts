@@ -2,6 +2,7 @@ import { User } from '../models/index.js';
 import { signToken } from '../services/auth.js';
 import { GraphQLError } from 'graphql';
 
+
 export const resolvers = {
   Query: {
     me: async (_: any, __: any, context: any) => {
@@ -37,12 +38,14 @@ export const resolvers = {
           });
         }
 
-        const user = await User.create({ username, email, password });
+        const user: {_id: any; username: string; email: string } = await User.create({ username, email, password });
         const token = signToken(user);
+     
         
         return { token, user };
-      } catch (error) {
-        throw new GraphQLError('User creation failed', {
+      } catch (error:any) {
+        console.log(error);
+        throw new GraphQLError(error.message, {
           extensions: { code: 'INTERNAL_ERROR' }
         });
       }
@@ -67,8 +70,8 @@ export const resolvers = {
 
         const token = signToken(user);
         return { token, user };
-      } catch (error) {
-        throw new GraphQLError('Login failed', {
+      } catch (error:any) {
+        throw new GraphQLError(error.message, {
           extensions: { code: 'INTERNAL_ERROR' }
         });
       }

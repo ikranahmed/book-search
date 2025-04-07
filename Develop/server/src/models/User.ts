@@ -1,7 +1,7 @@
 import { Schema, model, type Document } from 'mongoose';
-import bcrypt from 'bcryptjs'; 
-import bookSchema from './Book';
-import type { BookDocument } from './Book';
+import bcrypt from 'bcrypt'; 
+import bookSchema from './Book.js';
+import type { BookDocument } from './Book.js';
 
 export interface UserDocument extends Document {
   username: string;
@@ -37,7 +37,7 @@ const userSchema = new Schema<UserDocument>(
   {
     toJSON: {
       virtuals: true,
-      transform: (doc, ret) => {
+      transform: (_doc, ret) => {
         delete ret.password; 
         delete ret.__v; 
         return ret;
@@ -67,8 +67,8 @@ userSchema.virtual('bookCount').get(function () {
   return this.savedBooks?.length || 0;
 });
 
-userSchema.index({ email: 1 });
-userSchema.index({ username: 1 });
+// userSchema.index({ email: 1 });
+// userSchema.index({ username: 1 });
 
 const User = model<UserDocument>('User', userSchema);
 
