@@ -25,9 +25,13 @@ class AuthService {
     try {
       const decoded = jwtDecode<UserToken>(token);
       if (decoded.exp < Date.now() / 1000) {
+        localStorage.removeItem('id_token');
         return true;
       } 
-      
+
+      // localStorage.removeItem('id_token');
+
+
       return false;
     } catch (err) {
       return false;
